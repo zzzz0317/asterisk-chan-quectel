@@ -2174,7 +2174,9 @@ int at_response (struct pvt* pvt, const struct iovec iov[2], int iovcnt, at_res_
 				ast_log (LOG_WARNING, "[%s] Receive NO CARRIER\n", PVT_ID(pvt));
 
                                return 0;
-
+			case RES_QTONEDET:
+				ast_log (LOG_WARNING, "[%s] Receive QTONEDET %s\n", PVT_ID(pvt), str);
+				return 0;
 			case RES_CPIN:
 				/* fatal */
 				return at_response_cpin (pvt, str, len);
