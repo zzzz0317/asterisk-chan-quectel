@@ -2208,7 +2208,7 @@ int at_response (struct pvt* pvt, const struct iovec iov[2], int iovcnt, at_res_
 
                                return 0;
 			case RES_QTONEDET:
-				ast_log (LOG_WARNING, "[%s] Receive QTONEDET %s\n", PVT_ID(pvt), str);
+				ast_log (LOG_NOTICE, "[%s] Receive QTONEDET %s\n", PVT_ID(pvt), str);
 				at_response_dtmf_as_qtonedet(pvt, str);
 				return 0;
 			case RES_CPIN:
