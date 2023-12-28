@@ -2015,21 +2015,26 @@ static void at_response_dtmf_as_qtonedet(struct pvt* pvt, const char* str)
 {
 	unsigned int duration = 100;
 	unsigned int num = 0;
+	unsigned int len = 0;
+	struct cpvt * cpvt;
 	char asciiCode[3];
 	char event = '\0';
-	int len = strlen(str);
 
+	len = strlen(str);
         strncpy(asciiCode, str + len - 2, 2);
         asciiCode[2] = '\0';
 
         num = atoi(asciiCode);
 	event = (char) num;
+
+	cpvt = active_cpvt(pvt);
+
         if ((num >= 48 && num <= 57) || num == 42 || num == 35) {
 		ast_log(LOG_NOTICE, "DTMF event signal: '%c'\n", event);
 		struct ast_frame f = { AST_FRAME_DTMF, };
 		f.len = duration;
 		f.subclass.integer = event;
-		ast_queue_frame(&pvt->sys_chan, &f);
+		ast_queue_frame(cpvt->channel, &f);
 		ast_log(LOG_NOTICE, "DTMF event signal '%c' send successfully!\n", event);
 		return 1;
         }
@@ -2204,7 +2209,7 @@ int at_response (struct pvt* pvt, const struct iovec iov[2], int iovcnt, at_res_
                                return 0;
 			case RES_QTONEDET:
 				ast_log (LOG_WARNING, "[%s] Receive QTONEDET %s\n", PVT_ID(pvt), str);
-				at_response_dtmf_as_qtonedet(pvt, str)
+				at_response_dtmf_as_qtonedet(pvt, str);
 				return 0;
 			case RES_CPIN:
 				/* fatal */
